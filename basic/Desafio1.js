@@ -21,10 +21,44 @@ const str = `<ul>
   <li data-time="3:31">Flexbox Video</li>
 </ul>`;
 
+var turnTimeIntoSeconds = time => {
+
+  const minutesAndSeconds = time.split(":");
+
+  return parseInt(minutesAndSeconds[0] * 60) + parseInt(minutesAndSeconds[1])
+}
+var extractTime = str => {
+  var result = ''
+  var i = 0
+
+  while(!isNaN(parseInt(str[i],10)) || str[i] === ':') {
+      result = result.concat(str[i])
+      i++;
+  }
+  return [result, i];
+}
+var getTimeInSeconds = elem => {
+
+  const list = [];
+
+  for (var i = 0; i < elem.length; i++) {
+      if(elem[i] === '"' && !isNaN(parseInt(elem[i + 1], 10))) {
+          const result = extractTime(elem.substring(i + 1));
+          const time = result[0];
+          const video = elem.substring(result[1] + i + 3, result[1] + i + 4); 
+
+          if (video === 'R')
+              list.push(turnTimeIntoSeconds(time));
+      }
+  }
+
+  return list.reduce((a, b) => a + b, 0)
+}
+
+
+console.log(getTimeInSeconds(str));
 // obtener el total de segundos de todos los videos del tipo 'Redux Video'
-// pistas: convertirlo en objetos
-// Vale por el primer parcial
-// Fecha de entrega: Domingo 30 AGO 23:59
+
 // Fecha de solucio: Miercoles 2 de SEP
 
 // Modalidad de entrega. Pull Request.
